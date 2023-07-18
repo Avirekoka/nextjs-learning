@@ -38,7 +38,7 @@ const SignUp = () => {
                             </div>
                             <button type="submit" className="w-full text-white bg-grey-600 hover:bg-primary-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 border">{isLogin ? `Login` : `Create`} an account</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                {isLogin ? `Don't have an account?` : `Already have an account?`} <span className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer" onClick={() => setIsLogin}>{isLogin ? `Sign Up` : `Login here`}</span>
+                                {isLogin ? `Don't have an account?` : `Already have an account?`} <span className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer" onClick={() => setIsLogin(!isLogin)}>{isLogin ? `Sign Up` : `Login here`}</span>
                             </p>
                         </form>
                     </div>
