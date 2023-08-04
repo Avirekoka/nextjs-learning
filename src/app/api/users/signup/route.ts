@@ -1,7 +1,8 @@
 import { databaseConnection } from '@/dbConfig/dbConfig';
-import {User} from '@/models/userModel';
+import User from '@/models/userModel';
 import { NextResponse, NextRequest } from 'next/server';
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 databaseConnection();
 
@@ -11,6 +12,7 @@ export const POST = async (request: NextRequest) => {
         const requestBody = await request.json();
         const { userName, email, password } = requestBody;
 
+        console.log(userName, email, password);
         //Check for the missing parameters
         if (!userName || !email || !password) {
             return NextResponse.json({ error: 'Please fill all the required fields', status: 400 });
@@ -39,13 +41,29 @@ export const POST = async (request: NextRequest) => {
         const generateSalt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, generateSalt);
 
-        await User.create({
+        const newUser = await User.create({
             email,
             password: hashedPassword,
             userName
         });
 
-        return NextResponse.json({ message: 'User created successfully', status: 201 });
+        //Create a token data 
+        const tokenData = {
+            id: newUser._id,
+            userName: newUser.userName,
+            email: newUser.email
+        };
+        console.log(tokenData);
+
+        //create JWT token
+        const token = await jwt.sign(tokenData, process.env.JWT_TOKEN_SECRET, { expiresIn: "1h" });
+
+        const response = NextResponse.json({ message: "User created successfully", status: 201, success: true });
+
+        //set the token in cookies
+        response.cookies.set("token", token, { httpOnly: true });
+
+        return response;
 
     } catch (error: any) {
         console.log(error);

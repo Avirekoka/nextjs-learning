@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+mongoose.Promise = global.Promise;
+
 const UserSchema = new mongoose.Schema({
     userName: {
         type: String,
@@ -29,4 +31,6 @@ const UserSchema = new mongoose.Schema({
     verifyTokenExpiry: Date,
 });
 
-export const User = mongoose.models.users || mongoose.model('User', UserSchema);
+const User = mongoose.models.users || mongoose.model('User', UserSchema);
+
+export default User;

@@ -22,18 +22,17 @@ const SignUp = () => {
             const { email, password, userName } = user;
             setLoading(true);
             if (!isLogin) {
-                const response = await axios.post('/api/users/signup', {
+                const user = await axios.post('/api/users/signup', {
                     email, password, userName
                 });
+                console.log("User : ", user);
                 toast.success("Registration Success");
-                console.log("This is my response : ", response);
                 router.push('/');
             } else {
-                const response = await axios.post('/api/users/signin', {
+                await axios.post('/api/users/signin', {
                     email, password
                 });
-                toast.success("Login   Success");
-                console.log("This is my response : ", response);
+                toast.success("Login Success");
                 router.push('/');
             }
         } catch (error: any) {

@@ -1,20 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { User } from '@/models/userModel';
+import User from '@/models/userModel';
 import jwt from 'jsonwebtoken';
 
 export const POST = async (request: NextRequest, response: NextResponse) => {
     try {
-        console.log("Here");
+        console.log("Inside")
         const requestBody = await request.json();
-        console.log("There");
 
         const { email, password } = requestBody;
+        console.log("email, password : ", email, password);
         if (!email || !password) { 
             return NextResponse.json({ error: "Please provide a valid email and password", staus: 400 });
         };
 
-        const user = await User.findOne({ email });
+        console.log("email, password : ", email, password);
+
+        const user = await User.findOne({ email: email });
 
         //Check if user exists or not
         if (!user) {
@@ -42,10 +44,8 @@ export const POST = async (request: NextRequest, response: NextResponse) => {
 
         //set the token in cookies
         response.cookies.set("token", token, { httpOnly: true });
-        
-        return response;
 
-        return NextResponse.json({ message: "This is my user", user, status: 200 });
+        return NextResponse.json({ message: "This is my user", response, status: 200 });
 
 
     } catch (error: any) {
